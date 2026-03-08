@@ -3,140 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamsite34 | تطبيقك الإسلامي</title>
+    <title>إسلام ويب - تطبيق المسلم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; padding-bottom: 80px; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; padding-bottom: 90px; }
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-item.active { color: #059669; border-top: 3px solid #059669; }
-        .bg-gradient-emerald { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
+        .section.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item.active { color: #10b981; }
+        .nav-item.active i { transform: scale(1.2); color: #10b981; }
     </style>
 </head>
 <body>
 
-    <header class="bg-gradient-emerald text-white p-6 shadow-lg text-center rounded-b-[2rem] mb-6">
-        <h1 class="text-2xl font-bold">إسلامي 34</h1>
-        <div id="location-text" class="text-xs opacity-80 mt-2">جاري تحديد الموقع...</div>
+    <header class="bg-emerald-800 text-white p-8 shadow-2xl rounded-b-[3rem] text-center mb-8 border-b-4 border-emerald-600">
+        <h1 class="text-3xl font-bold tracking-wide">إسلام ويب</h1>
+        <div id="location-text" class="text-xs opacity-60 mt-2 tracking-widest uppercase italic">جاري تحديد موقعك...</div>
     </header>
 
-    <div class="container max-w-md mx-auto px-4">
+    <div class="container max-w-md mx-auto px-6">
         
         <section id="prayers" class="section active">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center mb-4">
-                <h2 id="next-prayer-name" class="text-gray-500 mb-2 italic text-sm">حساب الصلاة القادمة...</h2>
-                <div id="countdown" class="text-4xl font-bold text-emerald-700 tabular-nums">00:00:00</div>
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-emerald-50 text-center mb-6">
+                <h2 id="next-prayer-name" class="text-emerald-600 font-medium mb-1 italic">انتظار البيانات...</h2>
+                <div id="countdown" class="text-5xl font-black text-gray-800 tabular-nums">00:00:00</div>
             </div>
-            <div id="prayer-list" class="space-y-3"></div>
+            <div id="prayer-list" class="space-y-4">
+                </div>
         </section>
 
         <section id="tasbeeh" class="section">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-center">
-                <div id="sebha-count" class="text-7xl font-bold text-emerald-600 mb-8">0</div>
-                <button onclick="countUp()" class="w-40 h-40 rounded-full bg-emerald-600 text-white text-2xl font-bold shadow-xl active:scale-95 transition-all border-[10px] border-emerald-50">
-                    اضغط
+            <div class="bg-white rounded-[3rem] p-10 shadow-xl text-center border border-emerald-50 relative overflow-hidden">
+                <div class="text-gray-400 text-sm mb-2 font-bold uppercase tracking-widest">مجموع التسبيح</div>
+                <div id="sebha-count" class="text-8xl font-black text-emerald-600 mb-8 drop-shadow-md">0</div>
+                <button onclick="countUp()" class="w-44 h-44 rounded-full bg-emerald-600 text-white text-4xl font-bold shadow-2xl active:scale-95 transition-all border-[12px] border-emerald-50 flex items-center justify-center mx-auto focus:outline-none">
+                    <i class="fa-solid fa-fingerprint"></i>
                 </button>
-                <div class="mt-8 flex justify-center gap-4 text-sm">
-                    <button onclick="resetCount()" class="text-gray-400 underline">إعادة الضبط</button>
-                </div>
+                <button onclick="resetCount()" class="mt-8 text-gray-400 text-xs hover:text-red-500 transition-colors font-bold uppercase underline">تصفير العداد</button>
             </div>
         </section>
 
         <section id="azkar" class="section">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-4 border-r-4 border-r-emerald-500">
-                <h3 class="font-bold text-emerald-800 mb-4"><i class="fa-solid fa-sun ml-2"></i> ذكـر اليوم</h3>
-                <p id="azkar-content" class="text-gray-700 leading-relaxed text-lg">"سبحان الله وبحمده"</p>
+            <div class="bg-white rounded-3xl p-6 shadow-lg border-r-8 border-emerald-500 mb-6">
+                <h3 class="font-bold text-emerald-900 text-xl mb-3">ذكر اليوم</h3>
+                <p id="azkar-content" class="text-gray-600 leading-relaxed text-lg">"سبحان الله وبحمده، سبحان الله العظيم"</p>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-emerald-100 p-4 rounded-2xl text-center font-bold text-emerald-800">أذكار الصباح</div>
-                <div class="bg-blue-100 p-4 rounded-2xl text-center font-bold text-blue-800">أذكار المساء</div>
-            </div>
-        </section>
-
-    </div>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-3 shadow-2xl z-50">
-        <button onclick="showSection('prayers')" class="nav-item active flex flex-col items-center">
-            <i class="fa-solid fa-clock mb-1 text-xl"></i><span class="text-[10px]">المواقيت</span>
-        </button>
-        <button onclick="showSection('tasbeeh')" class="nav-item flex flex-col items-center">
-            <i class="fa-solid fa-beads-prayers mb-1 text-xl"></i><span class="text-[10px]">السبحة</span>
-        </button>
-        <button onclick="showSection('azkar')" class="nav-item flex flex-col items-center">
-            <i class="fa-solid fa-book-open mb-1 text-xl"></i><span class="text-[10px]">الأذكار</span>
-        </button>
-    </nav>
-
-    <script>
-        let pTimes = {};
-        let sCount = 0;
-
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        function countUp() { 
-            sCount++; 
-            document.getElementById('sebha-count').innerText = sCount;
-            if(navigator.vibrate) navigator.vibrate(30);
-        }
-
-        function resetCount() { sCount = 0; document.getElementById('sebha-count').innerText = 0; }
-
-        async function getPrayers(lat, lon) {
-            const r = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
-            const d = await r.json();
-            pTimes = d.data.timings;
-            document.getElementById('location-text').innerText = "توقيت: " + d.data.meta.timezone;
-            render();
-            timer();
-        }
-
-        function render() {
-            const list = {"الفجر": pTimes.Fajr, "الظهر": pTimes.Dhuhr, "العصر": pTimes.Asr, "المغرب": pTimes.Maghrib, "العشاء": pTimes.Isha};
-            let h = '';
-            for(const [n, t] of Object.entries(list)) {
-                h += `<div class="flex justify-between p-4 bg-white rounded-2xl shadow-sm border border-gray-50 text-gray-700 font-bold"><span>${n}</span><span class="text-emerald-700 font-bold">${t}</span></div>`;
-            }
-            document.getElementById('prayer-list').innerHTML = h;
-        }
-
-        function timer() {
-            setInterval(() => {
-                const now = new Date();
-                const times = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
-                const names = ["الفجر", "الظهر", "العصر", "المغرب", "العشاء"];
-                let next = null;
-                for(let i=0; i<times.length; i++) {
-                    const [hh, mm] = pTimes[times[i]].split(':');
-                    const d = new Date(); d.setHours(hh, mm, 0);
-                    if(d > now) { next = {n: names[i], d: d}; break; }
-                }
-                if(!next) {
-                    const [hh, mm] = pTimes.Fajr.split(':');
-                    const d = new Date(); d.setDate(d.getDate()+1); d.setHours(hh, mm, 0);
-                    next = {n: "الفجر", d: d};
-                }
-                const diff = next.d - now;
-                const hrs = Math.floor(diff/3600000);
-                const mins = Math.floor((diff%3600000)/60000);
-                const secs = Math.floor((diff%60000)/1000);
-                document.getElementById('next-prayer-name').innerText = `باقي على صلاة ${next.n}`;
-                document.getElementById('countdown').innerText = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-            }, 1000);
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (p) => getPrayers(p.coords.latitude, p.coords.longitude),
-            () => getPrayers(21.4225, 39.8262),
-            { enableHighAccuracy: true }
-        );
-    </script>
-</body>
-</html>
+            <div class="grid grid-cols-1 gap-4">
+                <button class="p-5 rounded-2xl bg-white border border-emerald-100 shadow-sm text-emerald-700 font-bold flex items-center justify-between px-8 hover:bg-emerald-50">
+                    <span>أذكار الصباح</span>
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+                <button class="p-5 rounded-2xl bg-white border border-blue-100 shadow-sm text-blue-700 font-bold flex items-
