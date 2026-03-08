@@ -3,110 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مواقيت الصلاة والسبحة</title>
+    <title>موقع إسلامي شامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f0f2f5; }
-        .bg-prayer-card { background: linear-gradient(135deg, #134e4a 0%, #065f46 100%); }
-        .sebha-btn { transition: transform 0.1s active; }
-        .sebha-btn:active { transform: scale(0.95); }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
+        .bg-main { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
+        .card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4">
+<body class="p-4 min-h-screen flex flex-col items-center">
 
-    <div class="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden mt-4">
-        <div class="bg-prayer-card p-8 text-white text-center">
-            <h2 id="next-prayer-name" class="text-xl opacity-90 font-medium">جاري التحميل...</h2>
-            <div id="countdown" class="text-5xl font-bold my-4 tabular-nums tracking-tighter">00:00:00</div>
-            <div id="location-name" class="text-xs opacity-70 bg-black/20 inline-block px-4 py-1 rounded-full">تحديد الموقع...</div>
+    <div class="w-full max-w-md card overflow-hidden mb-6">
+        <div class="bg-main p-6 text-white text-center">
+            <h2 id="next-prayer-name" class="text-lg opacity-80">جاري الحساب...</h2>
+            <div id="countdown" class="text-5xl font-bold my-3 tabular-nums">00:00:00</div>
+            <div id="location-text" class="text-xs bg-black/20 px-3 py-1 rounded-full inline-block">تحديد الموقع...</div>
         </div>
+        <div id="prayer-list" class="p-4 space-y-2 text-sm text-gray-700"></div>
+    </div>
 
-        <div id="prayer-list" class="p-6 space-y-3">
-            <div class="animate-pulse space-y-3">
-                <div class="h-14 bg-gray-100 rounded-2xl"></div>
-                <div class="h-14 bg-gray-100 rounded-2xl"></div>
-            </div>
-        </div>
+    <div class="w-full max-w-md card p-6 mb-6 border-r-8 border-emerald-600">
+        <h3 id="azkar-title" class="text-emerald-800 font-bold mb-2">أذكار</h3>
+        <p id="azkar-text" class="text-gray-600 leading-relaxed italic">"فَاذْكُرُونِي أَذْكُرْكُمْ"</p>
+    </div>
 
-        <div class="p-6 bg-emerald-50 border-t border-emerald-100 text-center">
-            <h3 class="text-emerald-800 font-bold mb-4">السبحة الإلكترونية</h3>
-            <div id="sebha-count" class="text-4xl font-bold text-emerald-600 mb-4">0</div>
-            <button onclick="countUp()" class="sebha-btn w-32 h-32 rounded-full bg-emerald-600 text-white text-2xl font-bold shadow-lg border-8 border-emerald-200 focus:outline-none">
-                اضغط
-            </button>
-            <div class="mt-4">
-                <button onclick="resetCount()" class="text-xs text-emerald-600 underline">إعادة ضبط</button>
-            </div>
-        </div>
+    <div class="w-full max-w-md card p-6 text-center border-b-8 border-emerald-600">
+        <div id="sebha-count" class="text-5xl font-bold text-emerald-700 mb-4">0</div>
+        <button onclick="countUp()" class="w-24 h-24 rounded-full bg-emerald-600 text-white text-xl font-bold shadow-lg active:scale-90 transition-transform border-4 border-emerald-100">
+            تسبيح
+        </button>
+        <div class="mt-4"><button onclick="resetCount()" class="text-xs text-gray-400 underline">إعادة ضبط</button></div>
     </div>
 
     <script>
-        let prayerTimes = {};
-        let count = 0;
+        let pTimes = {};
+        let sCount = 0;
 
-        // دالة السبحة
-        function countUp() {
-            count++;
-            document.getElementById('sebha-count').innerText = count;
-            if (navigator.vibrate) navigator.vibrate(50); // اهتزاز خفيف للجوال
+        // السبحة
+        function countUp() { 
+            sCount++; 
+            document.getElementById('sebha-count').innerText = sCount;
+            if(navigator.vibrate) navigator.vibrate(40);
         }
-        function resetCount() {
-            count = 0;
-            document.getElementById('sebha-count').innerText = count;
+        function resetCount() { sCount = 0; document.getElementById('sebha-count').innerText = 0; }
+
+        // الأذكار التلقائية
+        function updateAzkar() {
+            const hour = new Date().getHours();
+            const text = document.getElementById('azkar-text');
+            const title = document.getElementById('azkar-title');
+            if(hour >= 5 && hour < 12) {
+                title.innerText = "أذكار الصباح";
+                text.innerText = "أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له.";
+            } else if(hour >= 16 && hour < 20) {
+                title.innerText = "أذكار المساء";
+                text.innerText = "أمسينـا وأمسى الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له.";
+            } else {
+                title.innerText = "ذكر الله";
+                text.innerText = "سبحان الله وبحمده، عدد خلقه، ورضا نفسه، وزنة عرشه، ومداد كلماته.";
+            }
         }
 
-        async function fetchPrayers(lat, lon) {
+        async function getPrayers(lat, lon) {
             try {
-                const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
-                const data = await res.json();
-                prayerTimes = data.data.timings;
-                document.getElementById('location-name').innerText = "توقيت: " + data.data.meta.timezone;
+                const r = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
+                const d = await r.json();
+                pTimes = d.data.timings;
+                document.getElementById('location-text').innerText = d.data.meta.timezone;
                 render();
-                startTimer();
-            } catch (e) { document.getElementById('next-prayer-name').innerText = "خطأ في الشبكة"; }
+                timer();
+            } catch(e) { document.getElementById('next-prayer-name').innerText = "حدث خطأ"; }
         }
 
         function render() {
-            const list = { "الفجر": prayerTimes.Fajr, "الظهر": prayerTimes.Dhuhr, "العصر": prayerTimes.Asr, "المغرب": prayerTimes.Maghrib, "العشاء": prayerTimes.Isha };
+            const list = {"الفجر": pTimes.Fajr, "الظهر": pTimes.Dhuhr, "العصر": pTimes.Asr, "المغرب": pTimes.Maghrib, "العشاء": pTimes.Isha};
             let h = '';
-            for (const [n, t] of Object.entries(list)) {
-                h += `<div class="flex justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100"><span class="font-bold text-gray-700">${n}</span><span class="text-xl font-bold text-emerald-700">${t}</span></div>`;
+            for(const [n, t] of Object.entries(list)) {
+                h += `<div class="flex justify-between p-3 bg-gray-50 rounded-xl border border-gray-100"><span>${n}</span><span class="font-bold text-emerald-700">${t}</span></div>`;
             }
             document.getElementById('prayer-list').innerHTML = h;
         }
 
-        function startTimer() {
+        function timer() {
             setInterval(() => {
                 const now = new Date();
                 const times = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
                 const names = ["الفجر", "الظهر", "العصر", "المغرب", "العشاء"];
                 let next = null;
-                for (let i = 0; i < times.length; i++) {
-                    const [hh, mm] = prayerTimes[times[i]].split(':');
+                for(let i=0; i<times.length; i++) {
+                    const [hh, mm] = pTimes[times[i]].split(':');
                     const d = new Date(); d.setHours(hh, mm, 0);
-                    if (d > now) { next = { n: names[i], d: d }; break; }
+                    if(d > now) { next = {n: names[i], d: d}; break; }
                 }
-                if (!next) {
-                    const [hh, mm] = prayerTimes.Fajr.split(':');
-                    const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(hh, mm, 0);
-                    next = { n: "الفجر", d: d };
+                if(!next) {
+                    const [hh, mm] = pTimes.Fajr.split(':');
+                    const d = new Date(); d.setDate(d.getDate()+1); d.setHours(hh, mm, 0);
+                    next = {n: "الفجر", d: d};
                 }
                 const diff = next.d - now;
-                const hrs = Math.floor(diff / 3600000);
-                const mins = Math.floor((diff % 3600000) / 60000);
-                const secs = Math.floor((diff % 60000) / 1000);
+                const h = Math.floor(diff/3600000);
+                const m = Math.floor((diff%3600000)/60000);
+                const s = Math.floor((diff%60000)/1000);
                 document.getElementById('next-prayer-name').innerText = `باقي على صلاة ${next.n}`;
-                document.getElementById('countdown').innerText = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+                document.getElementById('countdown').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             }, 1000);
         }
 
-        // طلب الموقع بدقة عالية
         navigator.geolocation.getCurrentPosition(
-            (p) => fetchPrayers(p.coords.latitude, p.coords.longitude),
-            () => fetchPrayers(21.4225, 39.8262), // مكة كاحتياطي
+            (p) => getPrayers(p.coords.latitude, p.coords.longitude),
+            () => getPrayers(21.4225, 39.8262),
             { enableHighAccuracy: true }
         );
+        updateAzkar();
     </script>
 </body>
 </html>
