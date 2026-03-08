@@ -3,117 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إسلام ويب - القبلة والمواقيت</title>
+    <title>إسلام ويب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; padding-bottom: 100px; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; padding-bottom: 90px; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .nav-item.active { color: #10b981; border-top: 3px solid #10b981; }
-        .compass { width: 200px; height: 200px; border: 5px solid #065f46; border-radius: 50%; position: relative; margin: 20px auto; transition: transform 0.1s; }
-        .needle { position: absolute; top: 50%; left: 50%; width: 4px; height: 80px; background: #ef4444; transform: translate(-50%, -100%); border-radius: 2px; }
+        .tab-content.active { display: block; }
+        .nav-btn.active { color: #059669; border-top: 3px solid #059669; }
+        .qibla-box { width: 200px; height: 200px; margin: 20px auto; background: white; border-radius: 50%; border: 8px solid #ecfdf5; position: relative; display: flex; align-items: center; justify-content: center; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #needle { position: absolute; width: 4px; height: 80px; background: #ef4444; top: 50%; left: 50%; transform-origin: top center; transform: translate(-50%, -100%) rotate(0deg); transition: transform 0.8s ease; border-radius: 2px; }
     </style>
 </head>
 <body>
 
-    <header class="bg-emerald-800 text-white p-6 text-center rounded-b-[2.5rem] shadow-lg mb-4">
+    <header class="bg-emerald-800 text-white p-6 text-center rounded-b-[2rem] shadow-lg mb-6">
         <h1 class="text-2xl font-bold">إسلام ويب</h1>
+        <p id="loc-status" class="text-[10px] opacity-60 mt-1 italic">مواقيت مكة المكرمة (افتراضي)</p>
     </header>
 
-    <div class="max-w-md mx-auto px-4 text-center">
+    <div class="max-w-md mx-auto px-5">
+        
         <div id="prayers" class="tab-content active">
-            <div class="bg-white rounded-2xl p-6 shadow-md mb-4 border border-emerald-50">
-                <div id="next-prayer" class="text-emerald-600 font-bold mb-1">تحميل...</div>
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-50 text-center mb-5">
+                <div id="p-name" class="text-emerald-600 font-bold text-sm mb-1">باقي للصلاة</div>
                 <div id="timer" class="text-5xl font-black text-gray-800 tabular-nums">00:00:00</div>
             </div>
-            <div id="list" class="space-y-2"></div>
-        </div>
-
-        <div id="qibla" class="tab-content">
-            <div class="bg-white rounded-2xl p-8 shadow-md">
-                <h3 class="font-bold text-emerald-800 mb-2">اتجاه القبلة</h3>
-                <p class="text-xs text-gray-400 mb-4 italic">تأكد من تفعيل البوصلة في جوالك</p>
-                <div class="compass" id="compassRing">
-                    <div class="needle" id="qiblaNeedle"></div>
-                    <i class="fa-solid fa-kaaba text-emerald-800 text-3xl mt-[75px] inline-block"></i>
-                </div>
-                <div id="qiblaDeg" class="mt-4 font-bold text-emerald-700">0°</div>
+            <div id="p-list" class="space-y-3">
+                <div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold"><span>الفجر</span><span class="text-emerald-700">05:12</span></div>
+                <div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold"><span>الظهر</span><span class="text-emerald-700">12:24</span></div>
+                <div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold"><span>العصر</span><span class="text-emerald-700">15:45</span></div>
+                <div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold"><span>المغرب</span><span class="text-emerald-700">18:28</span></div>
+                <div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold"><span>العشاء</span><span class="text-emerald-700">19:58</span></div>
             </div>
         </div>
 
-        <div id="sebha" class="tab-content">
-            <div class="bg-white rounded-2xl p-10 shadow-md">
-                <div id="count" class="text-7xl font-bold text-emerald-600 mb-6">0</div>
-                <button onclick="add()" class="w-32 h-32 rounded-full bg-emerald-600 text-white text-4xl shadow-xl active:scale-90 mx-auto flex items-center justify-center border-8 border-emerald-50"><i class="fa fa-plus"></i></button>
-                <button onclick="reset()" class="mt-8 text-gray-400 text-xs underline block mx-auto">إعادة الضبط</button>
+        <div id="qibla" class="tab-content text-center">
+            <div class="bg-white rounded-3xl p-8 shadow-sm">
+                <h3 class="font-bold text-emerald-900 mb-2 italic">اتجاه القبلة</h3>
+                <div class="qibla-box">
+                    <div id="needle"></div>
+                    <i class="fa-solid fa-kaaba text-emerald-800 text-4xl"></i>
+                </div>
+                <p id="q-deg" class="mt-4 text-emerald-700 font-black text-2xl">255°</p>
+                <p class="text-[10px] text-gray-400 mt-2">السهم يشير لموقع الكعبة المشرفة</p>
+            </div>
+        </div>
+
+        <div id="sebha" class="tab-content text-center">
+            <div class="bg-white rounded-3xl p-10 shadow-sm border border-emerald-50">
+                <div id="count" class="text-8xl font-black text-emerald-600 mb-8">0</div>
+                <button onclick="add()" class="w-36 h-36 rounded-full bg-emerald-600 text-white text-5xl shadow-2xl active:scale-95 flex items-center justify-center mx-auto border-[10px] border-emerald-50">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button onclick="res()" class="mt-8 text-gray-300 text-[10px] font-bold tracking-widest uppercase">تصفير العداد</button>
             </div>
         </div>
 
         <div id="azkar" class="tab-content">
-            <div class="bg-white rounded-2xl p-6 shadow-md border-r-8 border-emerald-500 mb-4 text-right">
-                <h3 class="font-bold mb-2">ذكر اليوم</h3>
-                <p class="text-gray-600 italic leading-relaxed">"لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير"</p>
+            <div class="bg-white rounded-2xl p-6 border-r-8 border-emerald-500 shadow-sm mb-4">
+                <p class="text-gray-600 italic">"سبحان الله وبحمده، عدد خلقه، ورضا نفسه، وزنة عرشه، ومداد كلماته"</p>
             </div>
-            <div class="space-y-3">
-                <div class="p-5 bg-white rounded-xl shadow-sm border border-emerald-50 text-emerald-700 font-bold flex justify-between items-center"><span>أذكار الصباح</span><i class="fa fa-sun text-2xl"></i></div>
-                <div class="p-5 bg-white rounded-xl shadow-sm border border-blue-50 text-blue-700 font-bold flex justify-between items-center"><span>أذكار المساء</span><i class="fa fa-moon text-2xl"></i></div>
-            </div>
-        </div>
-    </div>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 shadow-2xl z-50">
-        <button onclick="tab('prayers', this)" class="nav-btn active flex flex-col items-center w-1/4">
-            <i class="fa fa-clock text-xl"></i><span class="text-[9px] mt-1">المواقيت</span>
-        </button>
-        <button onclick="tab('qibla', this)" class="nav-btn flex flex-col items-center w-1/4 text-gray-400">
-            <i class="fa fa-kaaba text-xl"></i><span class="text-[9px] mt-1">القبلة</span>
-        </button>
-        <button onclick="tab('sebha', this)" class="nav-btn flex flex-col items-center w-1/4 text-gray-400">
-            <i class="fa fa-beads-prayers text-xl"></i><span class="text-[9px] mt-1">السبحة</span>
-        </button>
-        <button onclick="tab('azkar', this)" class="nav-btn flex flex-col items-center w-1/4 text-gray-400">
-            <i class="fa fa-book-open text-xl"></i><span class="text-[9px] mt-1">الأذكار</span>
-        </button>
-    </nav>
-
-    <script>
-        let counter = 0;
-        function add() { counter++; document.getElementById('count').innerText = counter; if(navigator.vibrate) navigator.vibrate(35); }
-        function reset() { counter = 0; document.getElementById('count').innerText = 0; }
-
-        function tab(id, btn) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.add('text-gray-400'); b.classList.remove('active'); });
-            btn.classList.add('active');
-            btn.classList.remove('text-gray-400');
-        }
-
-        async function init(lat = 21.4225, lon = 39.8262) {
-            try {
-                const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
-                const d = await res.json();
-                const t = d.data.timings;
-                const list = {"الفجر":t.Fajr, "الظهر":t.Dhuhr, "العصر":t.Asr, "المغرب":t.Maghrib, "العشاء":t.Isha};
-                let h = '';
-                for(let [n,v] of Object.entries(list)) h += `<div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold text-gray-700"><span>${n}</span><span class="text-emerald-700">${v}</span></div>`;
-                document.getElementById('list').innerHTML = h;
-                
-                // حساب القبلة
-                const qRes = await fetch(`https://api.aladhan.com/v1/gcref?latitude=${lat}&longitude=${lon}`);
-                const qData = await qRes.json();
-                const qiblaDeg = Math.round(qData.data.direction);
-                document.getElementById('qiblaDeg').innerText = `الزاوية: ${qiblaDeg}°`;
-                document.getElementById('qiblaNeedle').style.transform = `translate(-50%, -100%) rotate(${qiblaDeg}deg)`;
-
-                // المؤقت
-                setInterval(() => {
-                    const now = new Date();
-                    let next = null;
-                    for(let [n,v] of Object.entries(list)) {
-                        let [hh,mm] = v.split(':');
-                        let d = new Date(); d.setHours(hh,mm,0);
-                        if(d > now
+            <div class="grid gap-3">
+                <div class="p-5 bg-white rounded-2xl shadow-sm border border-emerald-50 flex justify-
