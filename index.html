@@ -3,103 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إسلام ويب - المنصة الرسمية</title>
+    <title>إسلام ويب - النسخة الاحترافية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; padding-bottom: 100px; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; padding-bottom: 90px; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .nav-active { color: #059669 !important; border-top: 4px solid #059669; background: #f0fdf4; }
-        .compass-container { width: 250px; height: 250px; margin: 30px auto; position: relative; border: 10px solid #fff; border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: white; }
-        #needle { position: absolute; top: 50%; left: 50%; width: 8px; height: 100px; background: linear-gradient(to top, #ef4444 50%, #1e293b 50%); transform: translate(-50%, -100%) rotate(0deg); transform-origin: bottom center; transition: transform 0.3s ease-out; z-index: 5; border-radius: 10px; }
-        .sidebar { position: fixed; top: 0; right: -100%; width: 280px; height: 100%; background: white; z-index: 1000; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
+        /* البوصلة */
+        .compass-circle { width: 260px; height: 260px; border: 10px solid #fff; border-radius: 50%; position: relative; margin: 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background: white; transition: transform 0.1s linear; }
+        #qibla-needle { position: absolute; top: 50%; left: 50%; width: 6px; height: 100px; background: linear-gradient(to top, #ef4444 50%, #1e293b 50%); transform: translate(-50%, -100%) rotate(0deg); transform-origin: bottom center; z-index: 10; border-radius: 5px; }
+        .sidebar { position: fixed; top: 0; right: -100%; width: 280px; height: 100%; background: white; z-index: 1000; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); padding: 25px; }
         .sidebar.open { right: 0; }
+        .azkar-card { transition: all 0.3s; cursor: pointer; }
+        .azkar-card:active { scale: 0.98; }
     </style>
 </head>
 <body>
 
-    <div id="sidebar" class="sidebar p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-emerald-800">القائمة</h2>
-            <i class="fa fa-times text-2xl" onclick="toggleSide()"></i>
+    <div id="sidebar" class="sidebar">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-bold text-emerald-800">قائمة المنصة</h2>
+            <i class="fa fa-times text-2xl text-gray-400" onclick="toggleSide()"></i>
         </div>
-        <div class="space-y-4">
-            <div onclick="sw('policy-tab')" class="p-3 bg-gray-50 rounded-xl cursor-pointer font-bold">سياسة الخصوصية</div>
-            <div onclick="sw('about-tab')" class="p-3 bg-gray-50 rounded-xl cursor-pointer font-bold">من نحن</div>
-            <div onclick="sw('contact-tab')" class="p-3 bg-gray-50 rounded-xl cursor-pointer font-bold">اتصل بنا</div>
+        <div class="space-y-4 font-bold text-gray-600">
+            <div onclick="sw('policy-tab')" class="p-4 bg-gray-50 rounded-2xl hover:bg-emerald-50 cursor-pointer">سياسة الخصوصية</div>
+            <div onclick="sw('about-tab')" class="p-4 bg-gray-50 rounded-2xl hover:bg-emerald-50 cursor-pointer">من نحن</div>
+            <div onclick="sw('contact-tab')" class="p-4 bg-gray-50 rounded-2xl hover:bg-emerald-50 cursor-pointer">اتصل بنا</div>
         </div>
+        <p class="mt-10 text-[10px] text-gray-400 italic">هذه الصفحات جاهزة ومكتوبة بالكامل لقبول AdSense.</p>
     </div>
 
-    <header class="bg-emerald-800 text-white p-6 shadow-lg rounded-b-[2rem] flex justify-between items-center">
+    <header class="bg-emerald-800 text-white p-6 shadow-xl rounded-b-[2.5rem] flex justify-between items-center">
         <i class="fa fa-bars text-2xl cursor-pointer" onclick="toggleSide()"></i>
         <h1 class="text-2xl font-black">إسلام ويب</h1>
-        <i class="fa fa-rotate text-xl opacity-50" onclick="location.reload()"></i>
+        <i class="fa fa-location-dot text-xl opacity-50"></i>
     </header>
 
-    <div class="max-w-md mx-auto px-5 mt-4">
+    <div class="max-w-md mx-auto px-5 mt-6">
 
-        <div id="p-tab" class="tab-content active text-center">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-50 mb-4">
-                <div id="p-label" class="text-emerald-600 font-bold mb-1 italic">باقي للصلاة</div>
-                <div id="timer" class="text-5xl font-black text-slate-800">00:00:00</div>
+        <div id="p-tab" class="tab-content active">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-50 text-center mb-6">
+                <div id="p-label" class="text-emerald-600 font-bold mb-1">المتبقي لصلاة الفجر</div>
+                <div id="timer" class="text-5xl font-black text-slate-800 tabular-nums">00:00:00</div>
             </div>
-            <div id="p-list" class="space-y-3"></div>
+            <div id="p-list" class="space-y-3">
+                <div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold"><span>الفجر</span><span class="text-emerald-700">05:12</span></div>
+                <div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold"><span>الظهر</span><span class="text-emerald-700">12:24</span></div>
+                <div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold"><span>العصر</span><span class="text-emerald-700">15:45</span></div>
+                <div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold"><span>المغرب</span><span class="text-emerald-700">18:28</span></div>
+                <div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold"><span>العشاء</span><span class="text-emerald-700">19:58</span></div>
+            </div>
         </div>
 
         <div id="q-tab" class="tab-content text-center">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border">
-                <h3 class="font-bold text-xl mb-2">بوصلة القبلة</h3>
-                <button onclick="requestPermission()" id="btn-perm" class="bg-emerald-600 text-white px-4 py-2 rounded-full text-xs mb-2">تفعيل البوصلة</button>
-                <div class="compass-container">
-                    <div id="needle"></div>
-                    <i class="fa-solid fa-kaaba text-4xl text-emerald-800 absolute top-4 left-1/2 -translate-x-1/2"></i>
+            <div class="bg-white rounded-3xl p-8 border shadow-sm">
+                <h3 class="font-bold text-xl mb-4">بوصلة القبلة الدقيقة</h3>
+                <button onclick="initCompass()" id="comp-btn" class="bg-emerald-600 text-white px-6 py-3 rounded-full font-bold shadow-lg mb-4 animate-bounce">تشغيل البوصلة الحقيقية</button>
+                <div class="compass-circle">
+                    <div id="qibla-needle"></div>
+                    <i class="fa-solid fa-kaaba text-4xl text-emerald-900 absolute top-4 left-1/2 -translate-x-1/2"></i>
                 </div>
-                <div id="q-deg" class="text-2xl font-black text-emerald-700">--°</div>
+                <p id="q-deg" class="text-3xl font-black text-emerald-700 mt-4">--°</p>
+                <p class="text-[10px] text-gray-400 mt-4 px-6">ملاحظة: تأكد من تفعيل الـ GPS ووضع الجوال بشكل مستوٍ.</p>
+            </div>
+        </div>
+
+        <div id="s-tab" class="tab-content text-center">
+            <div class="bg-white rounded-3xl p-12 shadow-sm">
+                <div id="s-count" class="text-9xl font-black text-emerald-600 mb-10">0</div>
+                <button onclick="inc()" class="w-44 h-44 rounded-full bg-emerald-600 text-white text-6xl shadow-2xl flex items-center justify-center mx-auto border-[15px] border-emerald-50 active:scale-90 transition-all">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button onclick="clr()" class="mt-12 text-gray-300 font-bold underline">إعادة التصفير</button>
             </div>
         </div>
 
         <div id="a-tab" class="tab-content">
-            <div class="bg-emerald-600 text-white p-6 rounded-3xl mb-4 shadow-lg">
-                <h3 class="font-bold text-xl mb-2">أذكار الصباح والمساء</h3>
-                <p class="text-sm opacity-80 leading-loose">"سبحان الله وبحمده عدد خلقه، ورضا نفسه، وزنة عرشه، ومداد كلماته" (3 مرات)</p>
-            </div>
-            <div class="space-y-3">
-                <div class="p-4 bg-white rounded-2xl border font-bold text-emerald-800 flex justify-between"><span>أذكار الاستيقاظ</span><i class="fa fa-sun text-yellow-500"></i></div>
-                <div class="p-4 bg-white rounded-2xl border font-bold text-blue-800 flex justify-between"><span>أذكار النوم</span><i class="fa fa-moon text-blue-500"></i></div>
+            <h2 class="font-bold text-emerald-800 mb-4">أذكار المسلم اليومية</h2>
+            <div class="space-y-4">
+                <div onclick="countAzk(this, 33)" class="azkar-card p-6 bg-white rounded-3xl border-r-8 border-emerald-600 shadow-sm relative">
+                    <p class="text-gray-700 font-bold leading-relaxed">سبحان الله وبحمده</p>
+                    <div class="flex justify-between items-center mt-3 text-sm font-bold text-emerald-600">
+                        <span>العدد المطلوب: 33</span>
+                        <span class="bg-emerald-100 px-3 py-1 rounded-full counter">0</span>
+                    </div>
+                </div>
+                <div onclick="countAzk(this, 3)" class="azkar-card p-6 bg-white rounded-3xl border-r-8 border-blue-600 shadow-sm relative">
+                    <p class="text-gray-700 font-bold leading-relaxed">أصبحنا وأصبح الملك لله والحمد لله</p>
+                    <div class="flex justify-between items-center mt-3 text-sm font-bold text-blue-600">
+                        <span>العدد المطلوب: 3</span>
+                        <span class="bg-blue-100 px-3 py-1 rounded-full counter">0</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="policy-tab" class="tab-content text-right bg-white p-6 rounded-3xl border shadow-sm">
-            <h2 class="font-bold text-emerald-800 mb-4 border-b pb-2">سياسة الخصوصية</h2>
-            <p class="text-xs text-gray-600 leading-loose">مرحباً بك في إسلام ويب. نحن نحترم خصوصيتك، ولا نقوم بجمع أي بيانات شخصية حساسة. نستخدم ملفات تعريف الارتباط (Cookies) لتحسين تجربة المستخدم وعرض الإعلانات عبر جوجل أدسنس. باستخدامك للموقع، فإنك توافق على سياساتنا.</p>
+        <div id="policy-tab" class="tab-content bg-white p-8 rounded-3xl border">
+            <h2 class="font-bold text-emerald-800 text-xl mb-4 border-b pb-2">سياسة الخصوصية</h2>
+            <div class="text-sm text-gray-600 leading-loose space-y-4">
+                <p>نحن في "إسلام ويب" نلتزم بحماية بياناتك. نستخدم تقنيات مثل ملفات تعريف الارتباط (Cookies) لتحسين تجربة التصفح وعرض إعلانات مخصصة عبر برنامج "Google AdSense".</p>
+                <p>باستخدامك لموقعنا، فإنك توافق على جمع البيانات غير الحساسة لغرض تحسين المحتوى فقط. نحن لا نشارك بياناتك مع أي طرف ثالث خارج إطار الخدمات الإعلانية والتحليلية المعتمدة.</p>
+            </div>
         </div>
 
-        <div id="about-tab" class="tab-content text-right bg-white p-6 rounded-3xl border shadow-sm">
-            <h2 class="font-bold text-emerald-800 mb-4 border-b pb-2">من نحن</h2>
-            <p class="text-xs text-gray-600 leading-loose">إسلام ويب هي منصة رقمية تهدف إلى تقديم الخدمات الدينية اليومية للمسلمين حول العالم، من مواقيت الصلاة الدقيقة وتحديد اتجاه القبلة والأذكار النبوية الموثقة.</p>
+        <div id="about-tab" class="tab-content bg-white p-8 rounded-3xl border">
+            <h2 class="font-bold text-emerald-800 text-xl mb-4 border-b pb-2">من نحن</h2>
+            <p class="text-sm text-gray-600 leading-loose italic">
+                إسلام ويب هي منصة دينية مستقلة تهدف إلى توفير الأدوات اليومية التي يحتاجها المسلم (مواقيت صلاة، قبلة، أذكار) بأسلوب تقني حديث وبسيط، مع الحرص على دقة البيانات المستمدة من المصادر الرسمية.
+            </p>
         </div>
 
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 z-50">
+    <div class="flex justify-center gap-8 mt-10 opacity-30">
+        <i class="fa-brands fa-instagram text-2xl"></i>
+        <i class="fa-brands fa-youtube text-2xl"></i>
+        <i class="fa-brands fa-twitter text-2xl"></i>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 border-t flex justify-around py-4 z-50">
         <button onclick="sw('p-tab', this)" class="n-btn nav-active flex flex-col items-center w-1/4">
-            <i class="fa-solid fa-clock text-xl"></i><span class="text-[9px] mt-1">المواقيت</span>
+            <i class="fa-solid fa-clock text-xl"></i><span class="text-[10px] font-bold mt-1">المواقيت</span>
         </button>
         <button onclick="sw('q-tab', this)" class="n-btn text-gray-300 flex flex-col items-center w-1/4">
-            <i class="fa-solid fa-compass text-xl"></i><span class="text-[9px] mt-1">القبلة</span>
+            <i class="fa-solid fa-compass text-xl"></i><span class="text-[10px] font-bold mt-1">القبلة</span>
         </button>
         <button onclick="sw('s-tab', this)" class="n-btn text-gray-300 flex flex-col items-center w-1/4">
-            <i class="fa-solid fa-beads-prayers text-xl"></i><span class="text-[9px] mt-1">السبحة</span>
+            <i class="fa-solid fa-fingerprint text-xl"></i><span class="text-[10px] font-bold mt-1">السبحة</span>
         </button>
         <button onclick="sw('a-tab', this)" class="n-btn text-gray-300 flex flex-col items-center w-1/4">
-            <i class="fa-solid fa-book-open text-xl"></i><span class="text-[9px] mt-1">الأذكار</span>
+            <i class="fa-solid fa-book-open text-xl"></i><span class="text-[10px] font-bold mt-1">الأذكار</span>
         </button>
     </nav>
 
     <script>
+        let sc = 0;
+        function inc(){ sc++; document.getElementById('s-count').innerText = sc; if(navigator.vibrate) navigator.vibrate(35); }
+        function clr(){ sc = 0; document.getElementById('s-count').innerText = 0; }
+        
+        function countAzk(el, target) {
+            let badge = el.querySelector('.counter');
+            let current = parseInt(badge.innerText) + 1;
+            if(current <= target) {
+                badge.innerText = current;
+                if(navigator.vibrate) navigator.vibrate(20);
+                if(current == target) { el.style.opacity = '0.5'; el.style.background = '#f1f1f1'; }
+            }
+        }
+
         function toggleSide() { document.getElementById('sidebar').classList.toggle('open'); }
         
         function sw(id, b) {
@@ -109,118 +164,50 @@
                 document.querySelectorAll('.n-btn').forEach(n => { n.classList.add('text-gray-300'); n.classList.remove('nav-active'); });
                 b.classList.remove('text-gray-300'); b.classList.add('nav-active');
             }
-            if(id !== 'sidebar') toggleSide(); // إغلاق المنيو عند اختيار صفحة
+            if(id.includes('tab')) { document.getElementById('sidebar').classList.remove('open'); window.scrollTo(0,0); }
         }
 
-        let qiblaFixed = 255;
-        function requestPermission() {
+        // منطق القبلة الحقيقي
+        let qiblaFixed = 255; 
+        function initCompass() {
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(res => {
-                    if (res === 'granted') window.addEventListener('deviceorientation', handleCompass);
-                });
-            } else { window.addEventListener('deviceorientation', handleCompass); }
-            document.getElementById('btn-perm').style.display = 'none';
+                DeviceOrientationEvent.requestPermission().then(state => {
+                    if (state === 'granted') window.addEventListener('deviceorientation', handleRotate, true);
+                }).catch(e => alert("يجب السماح بالوصول للحساسات لتعمل البوصلة"));
+            } else {
+                window.addEventListener('deviceorientationabsolute', handleRotate, true);
+                window.addEventListener('deviceorientation', handleRotate, true);
+            }
+            document.getElementById('comp-btn').style.display = 'none';
         }
 
-        function handleCompass(e) {
-            let alpha = e.webkitCompassHeading || e.alpha;
-            if(alpha) {
-                let needleRotate = alpha + qiblaFixed;
-                document.getElementById('needle').style.transform = `translate(-50%, -100%) rotate(${needleRotate}deg)`;
+        function handleRotate(e) {
+            let heading = e.webkitCompassHeading || e.alpha;
+            if (heading) {
+                let rotate = (heading + qiblaFixed) % 360;
+                document.getElementById('qibla-needle').style.transform = `translate(-50%, -100%) rotate(${rotate}deg)`;
             }
         }
 
-        async function init(lat = 21.4225, lon = 39.8262) {
+        async function initTimes(lat = 21.4225, lon = 39.8262) {
             try {
                 const r = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
                 const d = await r.json();
                 const t = d.data.timings;
                 let h = '';
                 const list = {"الفجر":t.Fajr,"الظهر":t.Dhuhr,"العصر":t.Asr,"المغرب":t.Maghrib,"العشاء":t.Isha};
-                for(let [n,v] of Object.entries(list)) h += `<div class="flex justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-50 font-bold mb-2"><span>${n}</span><span class="text-emerald-700">${v}</span></div>`;
+                for(let [n,v] of Object.entries(list)) h += `<div class="flex justify-between p-5 bg-white rounded-2xl border border-gray-100 font-bold mb-2"><span>${n}</span><span class="text-emerald-700">${v}</span></div>`;
                 document.getElementById('p-list').innerHTML = h;
 
                 const qr = await fetch(`https://api.aladhan.com/v1/gcref?latitude=${lat}&longitude=${lon}`);
-                const qd = await qr.json();
-                qiblaFixed = Math.round(qd.data.direction);
+                const qdata = await qr.json();
+                qiblaFixed = Math.round(qdata.data.direction);
                 document.getElementById('q-deg').innerText = qiblaFixed + "°";
             } catch(e) {}
         }
 
-        navigator.geolocation.getCurrentPosition(p => init(p.coords.latitude, p.coords.longitude), () => init());
+        navigator.geolocation.getCurrentPosition(p => initTimes(p.coords.latitude, p.coords.longitude), () => initTimes());
     </script>
 </body>
 </html>
  
-    <script>
-        let sc = 0;
-        function inc(){ sc++; document.getElementById('s-count').innerText = sc; if(navigator.vibrate) navigator.vibrate(30); }
-        function clr(){ sc = 0; document.getElementById('s-count').innerText = 0; }
-
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('show');
-        }
-
-        function sw(id, b) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.n-btn').forEach(n => { n.classList.add('text-gray-300'); n.classList.remove('nav-active'); });
-            b.classList.remove('text-gray-300'); b.classList.add('nav-active');
-        }
-
-        let times = {"Fajr":"05:12","Dhuhr":"12:24","Asr":"15:45","Maghrib":"18:28","Isha":"19:58"};
-        let qiblaAngle = 255;
-
-        // البوصلة الحقيقية
-        function initCompass() {
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientationabsolute', function(event) {
-                    let alpha = event.alpha; // اتجاه الشمال المغناطيسي
-                    if(alpha !== null) {
-                        let finalRotation = alpha + qiblaAngle;
-                        document.getElementById('qibla-needle').style.transform = `translate(-50%, -100%) rotate(${finalRotation}deg)`;
-                    }
-                }, true);
-            }
-        }
-
-        async function init(lat = 21.4225, lon = 39.8262) {
-            try {
-                const r = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`);
-                const d = await r.json();
-                times = d.data.timings;
-                
-                let h = '';
-                const list = {"الفجر":times.Fajr,"الظهر":times.Dhuhr,"العصر":times.Asr,"المغرب":times.Maghrib,"العشاء":times.Isha};
-                for(let [n,v] of Object.entries(list)) h += `<div class="flex justify-between p-4 bg-white rounded-2xl shadow-sm border border-emerald-50 font-bold text-gray-700"><span>${n}</span><span class="text-emerald-700">${v}</span></div>`;
-                document.getElementById('p-list').innerHTML = h;
-
-                const qr = await fetch(`https://api.aladhan.com/v1/gcref?latitude=${lat}&longitude=${lon}`);
-                const qd = await qr.json();
-                qiblaAngle = Math.round(qd.data.direction);
-                document.getElementById('q-deg').innerText = qiblaAngle + "°";
-                initCompass();
-            } catch(e) {}
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            let next = null;
-            const names = {"Fajr":"الفجر","Dhuhr":"الظهر","Asr":"العصر","Maghrib":"المغرب","Isha":"العشاء"};
-            for(let k in names){
-                let [hh,mm] = times[k].split(':');
-                let d = new Date(); d.setHours(hh,mm,0);
-                if(d > now) { next = {n:names[k],d:d}; break; }
-            }
-            if(!next){ let [hh,mm]=times.Fajr.split(':'); let d=new Date(); d.setDate(d.getDate()+1); d.setHours(hh,mm,0); next={n:"الفجر",d}; }
-            let diff = next.d - now;
-            let h = Math.floor(diff/3600000); let m = Math.floor((diff%3600000)/60000); let s = Math.floor((diff%60000)/1000);
-            document.getElementById('p-label').innerText = `المتبقي لصلاة ${next.n}`;
-            document.getElementById('timer').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }, 1000);
-
-        navigator.geolocation.getCurrentPosition(p => init(p.coords.latitude, p.coords.longitude), () => init());
-    </script>
-</body>
-</html>
