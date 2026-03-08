@@ -151,6 +151,84 @@
         }, 1000);
 
         navigator.geolocation.getCurrentPosition(p => getPrayers(p.coords.latitude, p.coords.longitude), () => getPrayers());
+function openLegal(type) {
+    const modal = document.getElementById('legal-modal');
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content');
+    
+    modal.classList.remove('hidden');
+    if(type === 'privacy') {
+        title.innerText = "سياسة الخصوصية";
+        content.innerText = "نحن في إسلام ويب نهتم بخصوصيتك. نستخدم ملفات تعريف الارتباط لتحسين تجربتك وعرض إعلانات ملائمة عبر شركائنا. لا نقوم بجمع بياناتك الشخصية دون علمك.";
+    } else if(type === 'about') {
+        title.innerText = "من نحن";
+        content.innerText = "منصة إسلام ويب تركيا هي مبادرة فردية تهدف لتسهيل حياة العرب المقيمين في تركيا من خلال دمج مواقيت الصلاة مع الروابط الخدمية الحكومية الهامة.";
+    } else if(type === 'contact') {
+        title.innerText = "اتصل بنا";
+        content.innerText = "للاستفسارات أو الاقتراحات، يسعدنا تواصلكم عبر الإيميل الرسمي: info@islamsite.com";
+    }
+}
+
+function closeModal() {
+    document.getElementById('legal-modal').classList.add('hidden');
+}
     </script>
+        <div id="legal-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 max-h-[80vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-title" class="font-bold text-emerald-800 text-lg"></h3>
+                <button onclick="closeModal()" class="text-gray-400 text-3xl">&times;</button>
+            </div>
+            <div id="modal-content" class="text-sm text-gray-600 leading-relaxed text-right"></div>
+        </div>
+    </div>
+
+    <footer class="mt-10 mb-28 text-center px-4">
+        <div class="flex justify-center gap-6 text-[11px] text-gray-400 font-bold mb-4 border-t pt-4 border-gray-100">
+            <span onclick="openLegal('privacy')" class="cursor-pointer hover:text-emerald-600 transition">سياسة الخصوصية</span>
+            <span onclick="openLegal('about')" class="cursor-pointer hover:text-emerald-600 transition">من نحن</span>
+            <span onclick="openLegal('contact')" class="cursor-pointer hover:text-emerald-600 transition">اتصل بنا</span>
+        </div>
+        <p class="text-[9px] text-gray-300">جميع الحقوق محفوظة © 2026 إسلام ويب تركيا</p>
+    </footer>
+
+</body> ```
+
+---
+
+### الخطوة 2: إضافة "كود التشغيل" (JavaScript)
+الآن يجب أن تخبر المتصفح ماذا يفعل عندما يضغط الزائر على "سياسة الخصوصية". اذهب إلى قسم السكريبت (بين `<script>` و `</script>`) وأضف هذه الأسطر في النهاية:
+
+```javascript
+function openLegal(type) {
+    const modal = document.getElementById('legal-modal');
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content');
+    
+    modal.classList.remove('hidden');
+    
+    if(type === 'privacy') {
+        title.innerText = "سياسة الخصوصية";
+        content.innerText = "نحن في منصة إسلام ويب نلتزم بحماية خصوصية زوارنا. نستخدم ملفات تعريف الارتباط (Cookies) لتحسين تجربة الاستخدام وعرض إعلانات مخصصة عبر شركائنا الإعلانيين. لا نقوم بجمع معلومات شخصية دون إذنك الصريح.";
+    } else if(type === 'about') {
+        title.innerText = "من نحن";
+        content.innerText = "منصة إسلام ويب تركيا هي موقع خدمي يهدف لمساعدة العرب المقيمين في تركيا للوصول إلى مواقيت الصلاة بدقة (حسب رئاسة الشؤون الدينية التركية) بالإضافة لتسهيل الوصول للروابط الحكومية الهامة.";
+    } else if(type === 'contact') {
+        title.innerText = "اتصل بنا";
+        content.innerText = "يمكنكم التواصل معنا للاقتراحات أو الإبلاغ عن مشاكل تقنية عبر البريد الإلكتروني: admin@islamsite23.netlify.app";
+    }
+}
+
+function closeModal() {
+    document.getElementById('legal-modal').classList.add('hidden');
+}
+
+// لإغلاق النافذة عند الضغط خارجها
+window.onclick = function(event) {
+    const modal = document.getElementById('legal-modal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
 </body>
 </html>
